@@ -1,82 +1,85 @@
 orig_reg,dest_reg,flow
-Africa,Africa,3.498892
-Africa,Eastern Asia,0.007214
-Africa,Eastern Europe & Central Asia,0.03682
-Africa,Europe,1.744666
-Africa,Latin America & Caribbean,0.022516
-Africa,Northern America,0.825409
-Africa,Oceania,0.107072
-Africa,Southern Asia,0.000869
-Africa,Western Asia,0.675984
-Eastern Asia,Africa,0.021043
-Eastern Asia,Eastern Asia,2.178887
-Eastern Asia,Eastern Europe & Central Asia,0.085849
-Eastern Asia,Europe,0.565937
-Eastern Asia,Latin America & Caribbean,0.04099
-Eastern Asia,Northern America,1.593311
-Eastern Asia,Oceania,0.359676
-Eastern Asia,Southern Asia,0.002097
-Eastern Asia,Western Asia,0.380948
-Eastern Europe & Central Asia,Africa,0.00176
-Eastern Europe & Central Asia,Eastern Asia,0.025689
-Eastern Europe & Central Asia,Eastern Europe & Central Asia,1.354018
-Eastern Europe & Central Asia,Europe,0.566555
-Eastern Europe & Central Asia,Latin America & Caribbean,0.001438
-Eastern Europe & Central Asia,Northern America,0.043438
-Eastern Europe & Central Asia,Oceania,0.002543
-Eastern Europe & Central Asia,Southern Asia,0
-Eastern Europe & Central Asia,Western Asia,0.088158
-Europe,Africa,0.175242
-Europe,Eastern Asia,0.010825
-Europe,Eastern Europe & Central Asia,0.601772
-Europe,Europe,2.006166
-Europe,Latin America & Caribbean,0.168391
-Europe,Northern America,0.449838
-Europe,Oceania,0.222712
-Europe,Southern Asia,1.4e-05
-Europe,Western Asia,0.223626
-Latin America & Caribbean,Africa,0.004648
-Latin America & Caribbean,Eastern Asia,0.014653
-Latin America & Caribbean,Eastern Europe & Central Asia,0.009782
-Latin America & Caribbean,Europe,0.290048
-Latin America & Caribbean,Latin America & Caribbean,0.682464
-Latin America & Caribbean,Northern America,2.195385
-Latin America & Caribbean,Oceania,0.022709
-Latin America & Caribbean,Southern Asia,0
-Latin America & Caribbean,Western Asia,0.010966
-Northern America,Africa,0.011244
-Northern America,Eastern Asia,0.044196
-Northern America,Eastern Europe & Central Asia,0.172959
-Northern America,Europe,0.213784
-Northern America,Latin America & Caribbean,0.207948
-Northern America,Northern America,0.112105
-Northern America,Oceania,0.037692
-Northern America,Southern Asia,0
-Northern America,Western Asia,0.02632
-Oceania,Africa,0.006264
-Oceania,Eastern Asia,0.006773
-Oceania,Eastern Europe & Central Asia,0.015882
-Oceania,Europe,0.079224
-Oceania,Latin America & Caribbean,0.004123
-Oceania,Northern America,0.045753
-Oceania,Oceania,0.184822
-Oceania,Southern Asia,0
-Oceania,Western Asia,0.011272
-Southern Asia,Africa,0.051368
-Southern Asia,Eastern Asia,0.505476
-Southern Asia,Eastern Europe & Central Asia,0.042952
-Southern Asia,Europe,1.168379
-Southern Asia,Latin America & Caribbean,0.009744
-Southern Asia,Northern America,1.420783
-Southern Asia,Oceania,0.316133
-Southern Asia,Southern Asia,1.306389
-Southern Asia,Western Asia,3.106273
-Western Asia,Africa,0.244112
-Western Asia,Eastern Asia,0.007958
-Western Asia,Eastern Europe & Central Asia,0.395673
-Western Asia,Europe,0.431518
-Western Asia,Latin America & Caribbean,0.006412
-Western Asia,Northern America,0.323827
-Western Asia,Oceania,0.06514
-Western Asia,Southern Asia,0.036058
-Western Asia,Western Asia,4.519158
+100,100,38
+100,200,67
+100,300,81
+100,400,42
+100,500,43
+100,600,98
+100,700,42
+100,800,47
+100,900,34
+100,1000,87
+100,Radeloff,90
+100,FHSZ,87
+200,100,35
+200,200,70
+200,300,35
+200,400,53
+200,500,46
+200,600,33
+200,700,98
+200,800,90
+200,900,39
+200,1000,60
+200,Radeloff,78
+200,FHSZ,94
+300,100,89
+300,200,90
+300,300,65
+300,400,55
+300,500,70
+300,600,45
+300,700,54
+300,800,50
+300,900,82
+300,1000,62
+300,Radeloff,47
+300,FHSZ,60
+400,100,69
+400,200,52
+400,300,100
+400,400,57
+400,500,36
+400,600,58
+400,700,37
+400,800,60
+400,900,43
+400,1000,92
+400,Radeloff,85
+400,FHSZ,37
+500,100,64
+500,200,82
+500,300,48
+500,400,97
+500,500,86
+500,600,68
+500,700,72
+500,800,58
+500,900,72
+500,1000,56
+500,Radeloff,95
+500,FHSZ,61
+600,100,49
+600,200,90
+600,300,46
+600,400,71
+600,500,62
+600,600,87
+600,700,96
+600,800,59
+600,900,49
+600,1000,79
+600,Radeloff,32
+600,FHSZ,39
+700,100,67
+700,200,75
+700,300,76
+700,400,31
+700,500,93
+700,600,47
+700,700,69
+700,800,91
+700,900,86
+700,1000,62
+700,Radeloff,37
+700,FHSZ,80
