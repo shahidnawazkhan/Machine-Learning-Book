@@ -20,7 +20,7 @@ netm <- get.adjacency(net, attr="flow", sparse=F)
 # Create chart
 
 plot.new()
-pheatmap(netm, col=brewer.pal(10,"RdGy"),
+pheatmap(netm, col=brewer.pal(10,"RdBu"),
 	cluster_rows=F,cluster_cols=F,cellwidth=35,cellheight=24,
 	border_color="white",fontfamily="Lato Light", display_numbers=T, number_color=matrix(ifelse(netm > 1.5, "white", "red"), nrow(netm)))
 # Titling

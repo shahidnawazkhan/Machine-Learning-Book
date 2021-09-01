@@ -8,6 +8,6 @@ region,order1,col1,reg1,reg2
 700,7,#DB3937,Eastern,Asia
 800,8,#A463D7,Oceania,
 900,9,#0C5BCE,Latin America,& Caribbean
-1000,,,,
-Radeloff,,,,
-FHSZ,,,,
+1000,10,,,
+Radeloff,11,,,
+FHSZ,12,,,

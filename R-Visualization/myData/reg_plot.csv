@@ -1,13 +1,13 @@
-region,order1,col1,reg1,reg2
-100,1,#40A4D8,Northern,America
-200,2,#33BEB7,Africa,
-300,3,#B2C224,Europe,
-400,4,#FECC2F,Eastern Europe,& Central Asia
-500,5,#FBA127,Western,Asia
-600,6,#F66320,Southern,Asia
-700,7,#DB3937,Eastern,Asia
-800,8,#A463D7,Oceania,
-900,9,#0C5BCE,Latin America,& Caribbean
-1000,10,#DB3937,,
-Radeloff,11,#DB3937,,
-FHSZ,12,#DB3937,,
+region,order1,col1
+100,1,#40A4D8
+200,2,#33BEB7
+300,3,#B2C224
+400,4,#FECC2F
+500,5,#FBA127
+600,6,#F66320
+700,7,#DB3937
+800,8,#A463D7
+900,9,#0C5BCE
+1000,10,#DB3937
+1200,11,#DB3937
+1300,12,#DB3937
