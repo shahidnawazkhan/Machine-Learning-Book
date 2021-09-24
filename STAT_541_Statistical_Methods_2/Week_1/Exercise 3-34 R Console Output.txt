@@ -1,0 +1,17 @@
+> # Note that the import function defaulted to the file name ex3_34
+> str(ex3_34)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	30 obs. of  1 variable:
+ $ rates: num  49 40 59 56 55 70 49 59 55 49 ...
+> # Store  data in y and examine data structure
+> y <- ex3_34$rates
+> str(y)
+ num [1:30] 49 40 59 56 55 70 49 59 55 49 ...
+> summary(y)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  40.00   51.25   55.00   55.23   58.75   72.00 
+> # Histogram of data
+> hist(y,main="Frequency Histogram for Resting Pulse Rates",
++      breaks=5,freq=TRUE)
+> # Examine boxplot
+> boxplot(y,  main="Boxplot of Resting Pulse Rates")
+> 

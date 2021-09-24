@@ -1,0 +1,93 @@
+> library(readxl)
+> Mercury_in_Fish <- read_excel("C:/Lexar 8 & 32 GB Switch/Lexar 8GB/STAT 541 Summer 2020 Online (Current)/Homework/HW3 Multiple Regression Part 1/Mercury in Fish.xlsx")
+> View(Mercury_in_Fish)
+> # Note the name for the imported Excel file
+> str(Mercury_in_Fish)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	53 obs. of  6 variables:
+ $ Lake: num  1 2 3 4 5 6 7 8 9 10 ...
+ $ EHg : num  1.53 1.33 0.04 0.44 1.33 0.25 0.45 0.16 0.72 0.81 ...
+ $ Alk : num  5.9 3.5 116 39.4 2.5 19.6 5.2 71.4 26.4 4.8 ...
+ $ pH  : num  6.1 5.1 9.1 6.9 4.6 7.3 5.4 8.1 5.8 6.4 ...
+ $ Ca  : num  3 1.9 44.1 16.4 2.9 4.5 2.8 55.2 9.2 4.6 ...
+ $ Chlo: num  0.7 3.2 128.3 3.5 1.8 ...
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(Mercury_in_Fish)
+> str(dataobj)
+'data.frame':	53 obs. of  6 variables:
+ $ Lake: num  1 2 3 4 5 6 7 8 9 10 ...
+ $ EHg : num  1.53 1.33 0.04 0.44 1.33 0.25 0.45 0.16 0.72 0.81 ...
+ $ Alk : num  5.9 3.5 116 39.4 2.5 19.6 5.2 71.4 26.4 4.8 ...
+ $ pH  : num  6.1 5.1 9.1 6.9 4.6 7.3 5.4 8.1 5.8 6.4 ...
+ $ Ca  : num  3 1.9 44.1 16.4 2.9 4.5 2.8 55.2 9.2 4.6 ...
+ $ Chlo: num  0.7 3.2 128.3 3.5 1.8 ...
+> par(mfrow = c(1, 1)) 
+> # examine scatterplot matrix of dependent and independent variables
+> #  use columns 2,3,4,5,6 in dataset
+> plot(data[,2:6])
+Error in data[, 2:6] : object of type 'closure' is not subsettable
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(Mercury_in_Fish)
+> str(dataobj)
+'data.frame':	53 obs. of  6 variables:
+ $ Lake: num  1 2 3 4 5 6 7 8 9 10 ...
+ $ EHg : num  1.53 1.33 0.04 0.44 1.33 0.25 0.45 0.16 0.72 0.81 ...
+ $ Alk : num  5.9 3.5 116 39.4 2.5 19.6 5.2 71.4 26.4 4.8 ...
+ $ pH  : num  6.1 5.1 9.1 6.9 4.6 7.3 5.4 8.1 5.8 6.4 ...
+ $ Ca  : num  3 1.9 44.1 16.4 2.9 4.5 2.8 55.2 9.2 4.6 ...
+ $ Chlo: num  0.7 3.2 128.3 3.5 1.8 ...
+> par(mfrow = c(1, 1)) 
+> # examine scatterplot matrix of dependent and independent variables
+> #  use columns 2,3,4,5,6 in dataset
+> plot(dataobj[,2:6])
+> # correlation matrix with p-values
+> #  correlation matrix is first, then n, then p-values for each
+> #    pairwise correlation
+> library(ggplot2)
+> library(Hmisc)
+> mat <- as.matrix(dataobj[,2:6])
+> rcorr(mat, type="pearson")
+       EHg   Alk    pH    Ca  Chlo
+EHg   1.00 -0.63 -0.61 -0.46 -0.51
+Alk  -0.63  1.00  0.72  0.83  0.48
+pH   -0.61  0.72  1.00  0.58  0.61
+Ca   -0.46  0.83  0.58  1.00  0.41
+Chlo -0.51  0.48  0.61  0.41  1.00
+
+n= 53 
+
+
+P
+     EHg    Alk    pH     Ca     Chlo  
+EHg         0.0000 0.0000 0.0005 0.0001
+Alk  0.0000        0.0000 0.0000 0.0003
+pH   0.0000 0.0000        0.0000 0.0000
+Ca   0.0005 0.0000 0.0000        0.0023
+Chlo 0.0001 0.0003 0.0000 0.0023       
+> # multiple regression model with original data
+> model <- lm(EHg ~ Alk + pH + Ca + Chlo, data=dataobj)
+> summary(model)
+
+Call:
+lm(formula = EHg ~ Alk + pH + Ca + Chlo, data = dataobj)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.40447 -0.16668 -0.03927  0.09110  0.83958 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  1.062482   0.248941   4.268 9.24e-05 ***
+Alk         -0.004697   0.001960  -2.396   0.0205 *  
+pH          -0.057426   0.043812  -1.311   0.1962    
+Ca           0.002485   0.002559   0.971   0.3365    
+Chlo        -0.002149   0.001447  -1.485   0.1440    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2541 on 48 degrees of freedom
+Multiple R-squared:  0.4806,	Adjusted R-squared:  0.4373 
+F-statistic:  11.1 on 4 and 48 DF,  p-value: 1.86e-06
+
+> 
