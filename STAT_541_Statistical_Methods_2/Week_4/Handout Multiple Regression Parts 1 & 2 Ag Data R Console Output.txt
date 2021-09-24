@@ -1,0 +1,201 @@
+> # Note the name for the imported Excel file
+> str(Ag_Data)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	46 obs. of  12 variables:
+ $ Obs: num  1 2 3 4 5 6 7 8 9 10 ...
+ $ x1 : num  65 65 66 67 68 66 66 67 68 72 ...
+ $ x2 : num  84 84 84 79 81 74 73 75 84 86 ...
+ $ x3 : num  95 94 94 94 93 96 96 95 95 93 ...
+ $ x4 : num  40 28 41 50 46 73 72 70 63 56 ...
+ $ x5 : num  59 61 64 65 69 67 69 68 71 76 ...
+ $ x6 : num  85 86 83 83 88 77 78 84 89 91 ...
+ $ x7 : num  147 149 142 147 167 131 131 134 161 169 ...
+ $ x8 : num  151 159 152 158 180 147 159 159 195 206 ...
+ $ x9 : num  398 345 388 406 379 478 462 464 430 406 ...
+ $ x10: num  273 140 318 282 311 446 294 313 455 604 ...
+ $ y  : num  30 34 33 26 41 4 5 20 31 38 ...
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(Ag_Data)
+> str(dataobj)
+'data.frame':	46 obs. of  12 variables:
+ $ Obs: num  1 2 3 4 5 6 7 8 9 10 ...
+ $ x1 : num  65 65 66 67 68 66 66 67 68 72 ...
+ $ x2 : num  84 84 84 79 81 74 73 75 84 86 ...
+ $ x3 : num  95 94 94 94 93 96 96 95 95 93 ...
+ $ x4 : num  40 28 41 50 46 73 72 70 63 56 ...
+ $ x5 : num  59 61 64 65 69 67 69 68 71 76 ...
+ $ x6 : num  85 86 83 83 88 77 78 84 89 91 ...
+ $ x7 : num  147 149 142 147 167 131 131 134 161 169 ...
+ $ x8 : num  151 159 152 158 180 147 159 159 195 206 ...
+ $ x9 : num  398 345 388 406 379 478 462 464 430 406 ...
+ $ x10: num  273 140 318 282 311 446 294 313 455 604 ...
+ $ y  : num  30 34 33 26 41 4 5 20 31 38 ...
+> # load library regclass for VIF function
+> library(regclass)
+> # load library lmtest for Breusch-Pagan test
+> library(lmtest)
+> par(mfrow = c(1, 1))
+> # Scatterplot Matrix (note that columns 7,10,12 correspond to x6,x9,y)
+> pairs(dataobj[,c(7,10,12)],pch=19)
+> # Correlation test for each pair of variables 
+> cor.test(dataobj$'y',dataobj$'x6')
+
+	Pearson's product-moment correlation
+
+data:  dataobj$y and dataobj$x6
+t = 6.9447, df = 44, p-value = 1.378e-08
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.5478454 0.8376013
+sample estimates:
+      cor 
+0.7231368 
+
+> cor.test(dataobj$'y',dataobj$'x9')
+
+	Pearson's product-moment correlation
+
+data:  dataobj$y and dataobj$x9
+t = -9.7024, df = 44, p-value = 1.682e-12
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.9001065 -0.7039041
+sample estimates:
+       cor 
+-0.8255148 
+
+> cor.test(dataobj$'x6',dataobj$'x9')
+
+	Pearson's product-moment correlation
+
+data:  dataobj$x6 and dataobj$x9
+t = -5.7571, df = 44, p-value = 7.668e-07
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.7945750 -0.4509865
+sample estimates:
+       cor 
+-0.6554701 
+
+> # Fit the proposed model
+> model <- lm(y ~ x6 + x9, data=dataobj)
+> summary(model)
+
+Call:
+lm(formula = y ~ x6 + x9, data = dataobj)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-17.664  -3.501   1.027   5.140  14.824 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 72.45876   43.16227   1.679  0.10045    
+x6           0.92221    0.29775   3.097  0.00343 ** 
+x9          -0.30603    0.05117  -5.981  3.9e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.642 on 43 degrees of freedom
+Multiple R-squared:  0.7396,	Adjusted R-squared:  0.7275 
+F-statistic: 61.06 on 2 and 43 DF,  p-value: 2.737e-13
+
+> # confidence interval on model parameters
+> confint(model,level=0.95)
+                  2.5 %      97.5 %
+(Intercept) -14.5862438 159.5037738
+x6            0.3217377   1.5226827
+x9           -0.4092131  -0.2028373
+> # confidence interval on E(y) for specified values of all 
+> #   independent variables
+> forecastdata = data.frame(x6=90, 
++                           x9=70) 
+> predict(model,newdata=forecastdata,interval="confidence")
+       fit     lwr      upr
+1 134.0359 99.9341 168.1377
+> # prediction interval on y for specified values of all 
+> #   independent variables
+> predict(model,newdata=forecastdata,interval="prediction")
+       fit      lwr      upr
+1 134.0359 96.61352 171.4583
+> par(mfrow = c(2, 2))
+> plot(model, main="Ag Data Model with x6 and x9")
+> # Shapiro-Wilk test for normality of errors and use alpha=0.01
+> shapiro.test(resid(model))
+
+	Shapiro-Wilk normality test
+
+data:  resid(model)
+W = 0.96418, p-value = 0.1665
+
+> # Breusch-Pagan Test for a common error variance and use alpha=0.01
+> bptest(model)
+
+	studentized Breusch-Pagan test
+
+data:  model
+BP = 4.6148, df = 2, p-value = 0.09952
+
+> par(mfrow = c(1, 1))
+> # histogram of residuals
+> hist(resid(model), main="Histogram of Residuals",xlab="Residuals")
+> # boxplot of residuals
+> boxplot(resid(model), main="Boxplot of Residuals")
+> # Influential observations
+> influence.measures(model)
+Influence measures of
+	 lm(formula = y ~ x6 + x9, data = dataobj) :
+
+      dfb.1_   dfb.x6    dfb.x9    dffit cov.r   cook.d    hat inf
+1   0.027301 -0.02895 -0.018427  0.03491 1.152 4.16e-04 0.0697    
+2  -1.073012  0.91723  1.042055 -1.13557 1.130 4.05e-01 0.2608   *
+3   0.139330 -0.14036 -0.106024  0.15406 1.235 8.07e-03 0.1398   *
+4   0.041139 -0.04640 -0.024258  0.05387 1.180 9.90e-04 0.0923    
+5   0.097695 -0.08655 -0.088674  0.11841 1.130 4.76e-03 0.0643    
+6   0.029586 -0.20565  0.220084  0.54005 1.284 9.72e-02 0.2221   *
+7   0.026174 -0.06583  0.034510  0.13050 1.292 5.80e-03 0.1745   *
+8  -0.274608  0.05972  0.519511  0.69611 1.010 1.54e-01 0.1378    
+9  -0.143161  0.08664  0.198147  0.26409 1.046 2.32e-02 0.0557    
+10 -0.046490  0.03927  0.052977  0.12740 1.056 5.46e-03 0.0264    
+11  0.016034 -0.00645 -0.017974  0.13701 1.035 6.28e-03 0.0222    
+12 -0.034001  0.05699  0.002679  0.13411 1.064 6.06e-03 0.0310    
+13 -0.221193  0.22117  0.186995  0.30375 0.999 3.02e-02 0.0498    
+14 -0.013425  0.02829 -0.000713  0.15606 1.022 8.11e-03 0.0231    
+15  0.106306 -0.05174 -0.162484 -0.20273 1.153 1.39e-02 0.0946    
+16 -0.043353  0.10232 -0.050421 -0.21941 1.117 1.62e-02 0.0777    
+17 -0.062892  0.06226  0.047794 -0.08351 1.119 2.37e-03 0.0503    
+18 -0.086054  0.08519  0.065395 -0.11427 1.110 4.43e-03 0.0503    
+19 -0.116325  0.12207  0.075041 -0.21472 1.006 1.52e-02 0.0322    
+20 -0.013066  0.02348 -0.004725 -0.04218 1.158 6.07e-04 0.0745    
+21 -0.036787  0.01706  0.050756 -0.10155 1.082 3.49e-03 0.0308    
+22 -0.033753  0.05684  0.010674  0.27063 0.888 2.33e-02 0.0232    
+23  0.033727 -0.03945 -0.022019 -0.06460 1.103 1.42e-03 0.0350    
+24  0.045962  0.00254 -0.084208  0.32439 0.830 3.27e-02 0.0248    
+25 -0.020447  0.03432  0.003060  0.10407 1.071 3.66e-03 0.0262    
+26 -0.029209 -0.00595  0.064551 -0.13377 1.085 6.05e-03 0.0403    
+27 -0.122199  0.13570  0.086029  0.18353 1.075 1.13e-02 0.0480    
+28  0.012326 -0.02196  0.001058 -0.04631 1.111 7.31e-04 0.0375    
+29  0.008190  0.00576 -0.023250  0.04881 1.124 8.12e-04 0.0485    
+30 -0.032756  0.00356  0.061689 -0.09739 1.133 3.23e-03 0.0626    
+31  0.785899 -0.74934 -0.693989 -0.87837 0.841 2.32e-01 0.1216   *
+32  0.153168 -0.12042 -0.174162 -0.23614 1.042 1.85e-02 0.0478    
+33 -0.135569  0.14483  0.075235 -0.39298 0.740 4.62e-02 0.0253   *
+34 -0.013752  0.01726  0.007341  0.02648 1.117 2.39e-04 0.0406    
+35 -0.007920  0.01053  0.003402  0.01556 1.127 8.26e-05 0.0480    
+36  0.046013 -0.05426 -0.027728 -0.06719 1.145 1.54e-03 0.0671    
+37 -0.051449  0.07650  0.012355  0.12569 1.099 5.35e-03 0.0462    
+38  0.017892 -0.00392 -0.031371  0.04627 1.151 7.30e-04 0.0693    
+39  0.056914 -0.01249 -0.098464  0.16018 1.091 8.66e-03 0.0497    
+40  0.152888 -0.14415 -0.147097 -0.29786 0.911 2.84e-02 0.0306    
+41  0.743522 -0.53669 -0.889200 -0.98286 0.773 2.83e-01 0.1224   *
+42 -0.002309  0.00807 -0.004576  0.02726 1.107 2.53e-04 0.0318    
+43  0.000522 -0.00100  0.000127 -0.00222 1.115 1.68e-06 0.0376    
+44  0.006358 -0.01492  0.005062 -0.03373 1.124 3.88e-04 0.0468    
+45 -0.001489  0.00888 -0.007456  0.02911 1.116 2.89e-04 0.0401    
+46 -0.003798  0.01728 -0.013111  0.04910 1.125 8.22e-04 0.0492    
+> # Check for multicollinearity
+> # The VIF function uses the R package regclass
+> VIF(model)
+      x6       x9 
+1.753282 1.753282 
+>
