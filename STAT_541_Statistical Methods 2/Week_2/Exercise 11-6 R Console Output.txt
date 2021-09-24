@@ -1,0 +1,58 @@
+> library(readxl)
+> ex11_6 <- read_excel("C:/Lexar 8 & 32 GB Switch/Lexar 8GB/STAT 541 Summer 2020 Online (Current)/Homework/HW2 Simple Linear Regression/ex11-6.xlsx")
+> View(ex11_6)
+> # Note the name for the imported Excel file
+> str(ex11_6)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	10 obs. of  2 variables:
+ $ x: num  20 36 50 80 95 121 85 63 98 108
+ $ y: num  32 75 87 152 195 274 184 123 136 203
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(ex11_6)
+> str(dataobj)
+'data.frame':	10 obs. of  2 variables:
+ $ x: num  20 36 50 80 95 121 85 63 98 108
+ $ y: num  32 75 87 152 195 274 184 123 136 203
+> par(mfrow=c(1,1))
+> plot(dataobj$x,dataobj$y,xlab="x", ylab="y",
++      main="Chapter 11 Exercise 11.6", pch=19,cex=1.5)
+> # Split the plotting panel into a 2 x 2 grid
+> #  this puts four graphs in one window
+> par(mfrow = c(2, 2))
+> # model the dependent variable as a function of 
+> #   the independent variable
+> model <- lm(y ~ x , data=dataobj)
+> summary(model)
+
+Call:
+lm(formula = y ~ x, data = dataobj)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-56.252  -5.558   1.658  10.100  34.360 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -9.6627    20.9454  -0.461    0.657    
+x             2.0604     0.2564   8.035 4.23e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 25.08 on 8 degrees of freedom
+Multiple R-squared:  0.8898,	Adjusted R-squared:  0.876 
+F-statistic: 64.56 on 1 and 8 DF,  p-value: 4.231e-05
+
+> confint(model,level=0.95)
+                 2.5 %    97.5 %
+(Intercept) -57.962923 38.637587
+x             1.469052  2.651653
+> plot(model)
+> par(mfrow=c(1,1))
+> plot(dataobj$x,dataobj$y,xlab="x", ylab="y",
++      main="Chapter 11 Exercise 11.6", pch=19,cex=1.5)
+> lines(sort(dataobj$x),fitted(model)[order(dataobj$x)], col="blue", type="l")
+> # Predict y for a given value of x
+> predict(model, data.frame(x = 77))
+       1 
+148.9845 
+>
