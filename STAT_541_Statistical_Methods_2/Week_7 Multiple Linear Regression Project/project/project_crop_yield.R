@@ -24,8 +24,8 @@ par(mfrow = c(1, 1))
 
 # examine scatterplot matrix of dependent and independent variables
 #  use columns 2,3,4,5,6 in dataset
+#plot(dataobj[,2:7],main="Crop Yield Using temporal NDVI")
 plot(dataobj[,2:7],main="Crop Yield Using temporal NDVI")
-
 
 # correlation matrix with p-values
 #  correlation matrix is first, then n, then p-values for each
@@ -36,7 +36,7 @@ mat <- as.matrix(dataobj[,2:7])
 rcorr(mat, type="pearson")
 
 # multiple regression model
-model <- lm(yield_y ~ may_ndvi + june_ndvi + july_ndvi + august_ndvi+september_ndvi, data=dataobj)
+model <- lm(yield_y ~ may_ndvi + june_ndvi + july_ndvi +september_ndvi, data=dataobj)
 summary(model)
 ############
 ## Part 2 ##
@@ -68,7 +68,7 @@ bptest(model)
 
 par(mfrow = c(1, 1))
 # histogram of residuals
-hist(resid(model), main="Crop Yield Prediction Histogram of Residuals",xlab="Residuals")
+hist(resid(model), main="Crop Yield Histogram of Residuals",xlab="Residuals")
 # boxplot of residuals
 boxplot(resid(model), main="Mercury in Fish Boxplot of Residuals")
 
