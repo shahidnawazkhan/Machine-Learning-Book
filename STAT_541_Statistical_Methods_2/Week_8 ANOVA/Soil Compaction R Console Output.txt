@@ -1,0 +1,98 @@
+> # Note the name for the imported Excel file
+> str(Soil_Compaction)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	21 obs. of  2 variables:
+ $ Grazing: chr  "Continuous" "Continuous" "Continuous" "Continuous" ...
+ $ Density: num  2.05 3.05 3.12 1.59 3.83 1.53 1.44 1.2 1.48 3.54 ...
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(Soil_Compaction)
+> str(dataobj)
+'data.frame':	21 obs. of  2 variables:
+ $ Grazing: chr  "Continuous" "Continuous" "Continuous" "Continuous" ...
+ $ Density: num  2.05 3.05 3.12 1.59 3.83 1.53 1.44 1.2 1.48 3.54 ...
+> # Create factor variable to designate populations used in analysis
+> dataobj$grazing.factor <- as.factor(dataobj$Grazing)
+> str(dataobj)
+'data.frame':	21 obs. of  3 variables:
+ $ Grazing       : chr  "Continuous" "Continuous" "Continuous" "Continuous" ...
+ $ Density       : num  2.05 3.05 3.12 1.59 3.83 1.53 1.44 1.2 1.48 3.54 ...
+ $ grazing.factor: Factor w/ 3 levels "2wk_2wk","3wk_1wk",..: 3 3 3 3 3 3 3 2 2 2 ...
+> # boxplot of observed data
+> boxplot(Density ~ Grazing, data=dataobj, main="Boxplot of Observed Soil Density")
+> # average of all soil density observations
+> mean(dataobj$Density)
+[1] 1.901429
+> # Use aggregate function to compute summary statistics
+> # Use table function to get number of observations
+> ResponseMean <- aggregate(Density ~ Grazing, data=dataobj, mean)
+> ResponseVar <- aggregate(Density ~ Grazing, data=dataobj, var)
+> ResponseObs <- matrix(table(dataobj$grazing.factor))
+> # Build table and define column names
+> ResponseAgg <- cbind(ResponseMean, ResponseVar[,2], ResponseObs)
+> names(ResponseAgg) <- c("Grazing", "Mean", "Variance", "#Obs")
+> ResponseAgg
+     Grazing     Mean  Variance #Obs
+1    2wk_2wk 1.505714 0.1941619    7
+2    3wk_1wk 1.825714 0.8558619    7
+3 Continuous 2.372857 0.9062905    7
+> # Split the plotting panel into a 2 x 2 grid
+> #  this puts four graphs in one window
+> par(mfrow = c(2, 2))
+> # Use lm function for ANOVA analysis 
+> #  Note: Variable for treatments must be a factor
+> result <- lm(Density ~ grazing.factor,data=dataobj)
+> anova(result)  
+Analysis of Variance Table
+
+Response: Density
+               Df Sum Sq Mean Sq F value Pr(>F)
+grazing.factor  2  2.692  1.3460  2.0641 0.1559
+Residuals      18 11.738  0.6521               
+> plot(result)
+> #
+> # Check assumptions using residuals
+> #
+> par(mfrow = c(1, 1))
+> # Examine residuals
+> dataobj$residuals <- resid(result)
+> boxplot(residuals~Grazing,data=dataobj,main="Boxplot of Soil Compaction Residuals")
+> boxplot(resid(result),main="Boxplot of Residuals")
+> hist(resid(result),main="Histogram of Soil Compaction Residuals")
+> shapiro.test(resid(result))
+
+	Shapiro-Wilk normality test
+
+data:  resid(result)
+W = 0.89801, p-value = 0.03202
+
+> # Need R package car for Levene's Test for Homogeneity of Variance
+> # Install R package car before running the following code
+> library(car)
+> leveneTest(Density~grazing.factor,data=dataobj)
+Levene's Test for Homogeneity of Variance (center = median)
+      Df F value Pr(>F)
+group  2  1.0644 0.3657
+      18               
+> # Need R package inferr for Levene's Test for Homogeneity of Variance
+> #  Install R package inferr before running the following code
+> library(inferr)
+> infer_levene_test(data=dataobj, Density, group_var=grazing.factor)
+             Summary Statistics              
+  Levels      Frequency    Mean    Std. Dev  
+--------------------------------------------
+ 2wk_2wk          7        1.51      0.44    
+ 3wk_1wk          7        1.83      0.93    
+Continuous        7        2.37      0.95    
+--------------------------------------------
+  Total          21        1.9       0.85    
+--------------------------------------------
+
+                             Test Statistics                              
+-------------------------------------------------------------------------
+Statistic                            Num DF    Den DF         F    Pr > F 
+-------------------------------------------------------------------------
+Brown and Forsythe                        2        18    3.4435    0.0542 
+Levene                                    2        18    1.0644    0.3657 
+Brown and Forsythe (Trimmed Mean)         2        18    3.4435    0.0542 
+-------------------------------------------------------------------------
+> 

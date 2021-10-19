@@ -1,0 +1,87 @@
+> # Note the name for the imported Excel file
+> str(Etching_Rate)
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	20 obs. of  2 variables:
+ $ Power   : num  160 160 160 160 160 180 180 180 180 180 ...
+ $ EtchRate: num  575 542 530 539 570 565 593 590 579 610 ...
+> # To have most of our R code reuseable for future 
+> #  analyses, we will use a data object called dataobj
+> dataobj <- as.data.frame(Etching_Rate)
+> str(dataobj)
+'data.frame':	20 obs. of  2 variables:
+ $ Power   : num  160 160 160 160 160 180 180 180 180 180 ...
+ $ EtchRate: num  575 542 530 539 570 565 593 590 579 610 ...
+> summary(dataobj)
+     Power        EtchRate    
+ Min.   :160   Min.   :530.0  
+ 1st Qu.:175   1st Qu.:573.8  
+ Median :190   Median :605.0  
+ Mean   :190   Mean   :617.8  
+ 3rd Qu.:205   3rd Qu.:659.5  
+ Max.   :220   Max.   :725.0  
+> colnames(dataobj)
+[1] "Power"    "EtchRate"
+> # Create factor variable to use in analysis
+> dataobj$Power.Level <- as.factor(dataobj$Power)
+> dataobj$Power.Level
+ [1] 160 160 160 160 160 180 180 180 180 180 200 200 200 200 200 220 220 220 220 220
+Levels: 160 180 200 220
+> class(Power.Level)
+[1] "factor"
+> # Look at boxplot of observed etching rates
+> boxplot(EtchRate~Power.Level,data=dataobj,main="Boxplot of Observed Etching Rates")
+> # average of all etching rates
+> mean(dataobj$EtchRate)
+[1] 617.75
+> # Use aggregate function to compute summary statistics
+> # Use table function to get number of observations
+> ResponseMean <- aggregate(EtchRate ~ Power, data=dataobj, mean)
+> ResponseVar <- aggregate(EtchRate ~ Power, data=dataobj, var)
+> ResponseObs <- matrix(table(dataobj$Power))
+> # Build table and define column names
+> ResponseAgg <- cbind(ResponseMean, ResponseVar[,2], ResponseObs)
+> names(ResponseAgg) <- c("Power Level", "Mean", "Variance", "#Obs")
+> ResponseAgg
+  Power Level  Mean Variance #Obs
+1         160 551.2    400.7    5
+2         180 587.4    280.3    5
+3         200 625.4    421.3    5
+4         220 707.0    232.5    5
+> par(mfrow = c(2, 2))
+> # Use lm function to analyze the data
+> result <- lm(EtchRate~Power.Level,data=dataobj)
+> anova(result)  
+Analysis of Variance Table
+
+Response: EtchRate
+            Df Sum Sq Mean Sq F value    Pr(>F)    
+Power.Level  3  66871 22290.2  66.797 2.883e-09 ***
+Residuals   16   5339   333.7                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> plot(result)
+> #
+> # Check assumptions using residuals
+> #
+> par(mfrow = c(1, 1))
+> model.residuals <- resid(result)
+> hist(model.residuals,main="Histogram of Etching Rate Residuals")
+> boxplot(model.residuals~as.factor(Power),data=dataobj,
++         main="Boxplot of Etching Rate Residuals")
+> # Shapiro-Wilk Normality Test of residuals
+> shapiro.test(model.residuals)
+
+	Shapiro-Wilk normality test
+
+data:  model.residuals
+W = 0.93752, p-value = 0.2152
+
+> # Need R package car for Levene's Test for Homogeneity of Variances
+> # Install R package car before running the following code
+> library(car)
+Loading required package: carData
+> leveneTest(EtchRate~Power.Level,data=dataobj)
+Levene's Test for Homogeneity of Variance (center = median)
+      Df F value Pr(>F)
+group  3  0.1959 0.8977
+      16               
+> 
